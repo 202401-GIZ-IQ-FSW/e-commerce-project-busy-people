@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 
+
 const connectToMongo = require("./db/connection");
 
 const app = express();
@@ -18,3 +19,4 @@ app.listen(port, () => {
 });
 
 module.exports = app;
+
