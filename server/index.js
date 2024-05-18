@@ -9,6 +9,14 @@ const port =
     ? process.env.NODE_LOCAL_TEST_PORT
     : process.env.NODE_LOCAL_PORT;
 
+// Routes
+// const adminRoutes = require("./routes/admin");
+// const customerRoutes = require("./routes/customer");
+
+
+// app.use('/admin', adminRoutes);
+// app.use('/customer', customerRoutes);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
