@@ -4,6 +4,8 @@ const customerAuthRouter = require('./routes/authCustomer')
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
+const adminRoutes = require('./routes/admin');
+
 
 require("dotenv").config();
 
@@ -12,6 +14,7 @@ require("dotenv").config();
 const connectToMongo = require("./db/connection");
 
 const app = express();
+app.use('/admin', adminRoutes);
 
 const sessionConfig = {
   secret: process.env.APP_SECRET, //provid it when you make a .env enviremont 
