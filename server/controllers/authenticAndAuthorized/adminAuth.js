@@ -6,38 +6,41 @@ const bcrypt = require('bcrypt');
 
 
 
-exports.signup = async(req, res)=>{
-    const {email, password} = req.body;
-    
-    try{
+exports.signup = async (req, res) => {
+    const { email, password } = req.body;
+
+    // Basic input validation
+    if (!email || !password) {
+        return res.status(400).send('Email and password are required');
+    }
+
+    try {
         const existingUser = await Admin.findOne({ email });
         if (existingUser) {
-            return res.status(400).send('"Invalid email or password"');
+            return res.status(400).send('Email is already in use');
         }
 
-        //hashing the password before inserting it into the table 
+        // Hashing the password before inserting it into the database
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // create a new Admin before inserting into the table
-
+        // Create a new Admin user
         const newAdmin = new Admin({
-            email: email, 
+            email: email,
             password: hashedPassword
         });
 
-        //save the new admin
-
+        // Save the new admin to the database
         await newAdmin.save();
+
+        // Set the user ID in the session
         req.session.userId = newAdmin._id;
 
-        res.status(200).send('User created successfully');
-    }
-    catch (error) {
-        console.error(error);
+        res.status(201).send('User created successfully');
+    } catch (error) {
+        console.error('Error creating user:', error);
         res.status(500).send('Server error');
     }
-
 };
 
 exports.signin = async (req, res) => {
