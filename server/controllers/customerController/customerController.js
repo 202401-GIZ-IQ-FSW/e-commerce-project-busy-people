@@ -1,6 +1,6 @@
-const shopItemModel = require("../models/shopItem");
-const cartModel = require("../models/cart");
-const orderModel = require("../models/order");
+const shopItemModel = require("../../models/shopItem");
+const cartModel = require("../../models/cart");
+const orderModel = require("../../models/order");
 
 //Added comments for more clarity:
 
