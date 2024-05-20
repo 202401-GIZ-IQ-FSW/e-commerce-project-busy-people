@@ -1,7 +1,7 @@
 const request = require('supertest'); // for mocking HTTP requests
 const bcrypt = require('bcrypt'); // for hashing password
 const mockingoose = require('mockingoose'); // for mocking models
-const Admin = require('../../../models/adminSchema');
+const Admin = require('../../../models/admin');
 const { signup, signin, signout } = require('../adminAuth');
 const app = require('../../../index');
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ShopItem = require('../models/shopItemSchema');
+const ShopItem = require('../models/shopItem');
 
 // Add new shop item
 router.post('/add', async (req, res) => {

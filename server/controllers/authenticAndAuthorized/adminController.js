@@ -1,7 +1,7 @@
-const Item = require('../../models/shopItemSchema');
-const Customer = require('../../models/customerSchema');
-const Order = require('../../models/orderSchema');
-const Admin = require('../../models/adminSchema');
+const Item = require('../../models/shopItem');
+const Customer = require('../../models/customer');
+const Order = require('../../models/order');
+const Admin = require('../../models/admin');
 const bcrypt = require('bcrypt');
 
 

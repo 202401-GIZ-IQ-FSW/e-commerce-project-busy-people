@@ -1,5 +1,5 @@
-const Admin = require('../../models/adminSchema');
-
+const Admin = require('../../models/admin');
+const bcrypt = require('bcrypt');
 
 
  
@@ -7,9 +7,9 @@ const Admin = require('../../models/adminSchema');
 
 
 exports.signup = async(req, res)=>{
+    const {email, password} = req.body;
+    
     try{
-        const {email, password} = req.body;
-
         const existingUser = await Admin.findOne({ email });
         if (existingUser) {
             return res.status(400).send('"Invalid email or password"');

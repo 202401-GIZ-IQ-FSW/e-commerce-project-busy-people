@@ -1,7 +1,7 @@
 // customerController.js
 
-const Order = require('../../models/orderSchema');
-const Customer = require('../../models/customerSchema');
+const Order = require('../../models/order');
+const Customer = require('../../models/customer');
 
 // Fetch all previous orders information for a customer
 async function getAllOrders(req, res) {

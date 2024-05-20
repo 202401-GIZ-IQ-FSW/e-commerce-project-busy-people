@@ -2,9 +2,9 @@ const request = require('supertest');// for mocking the HTTP requests
 const  mockingoose = require('mockingoose'); // for mocking some models
 const bcrypt = require('bcrypt'); // for hashing some password
 const app = require('../../../index');
-const Order = require('../../../models/orderSchema');
-const Customer = require('../../../models/customerSchema');
-const Admin = require('../../../models/adminSchema');
+const Order = require('../../../models/order');
+const Customer = require('../../../models/customer');
+const Admin = require('../../../models/admin');
 
 
 const {getAllOrders, getAllCustomers, createAdminAccount} = require('../adminController');

@@ -1,5 +1,5 @@
 // middlewares/authMiddleware.js
-const Customer = require('../models/customerSchema');
+const Customer = require('../models/customer');
 
 const authMiddleware = async (req, res, next) => {
     if (!req.session.userId) {

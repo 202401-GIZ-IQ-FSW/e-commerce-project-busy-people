@@ -1,4 +1,4 @@
-const Customer = require('../../models/customerSchema');
+const Customer = require('../../models/customer');
 const bcrypt = require('bcrypt');
 
 
