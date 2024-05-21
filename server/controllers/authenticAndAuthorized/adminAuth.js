@@ -60,7 +60,8 @@ exports.signin = async (req, res) => {
         }
 
         // If email and password are correct, create session and respond
-        req.session.userId = existingUser._id;
+        // req.session.userId = existingUser._id;
+res.cookie('userId', existingUser.id)
 
         res.status(200).send('User signed in successfully');
     } catch (error) {

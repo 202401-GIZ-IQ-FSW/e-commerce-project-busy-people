@@ -1,6 +1,8 @@
 const express = require("express");
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
+var cookieParser = require('cookie-parser')
+
 require("dotenv").config();
 
 const connectToMongo = require("./db/connection");
@@ -8,7 +10,7 @@ const authAdminRoutes = require('./routes/authAdmin');
 const adminRoutes = require('./routes/adminRouter');
  
 const app = express();
-
+app.use(cookieParser())
 const sessionConfig = {
   secret: process.env.APP_SECRET,
   resave: false,
@@ -21,7 +23,7 @@ const sessionConfig = {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 requests per windowMs
+  max: 100, // limit each IP to 5 requests per windowMs
   message: 'Too many requests from this IP, please try again later'
 });
 
