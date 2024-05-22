@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const ShopItem = require('../models/shopItem');
+const authorizeAdmin = require('../middleware/adminAuthorization');
 
 // Add new shop item
-router.post('/add', async (req, res) => {
+router.post('/add',authorizeAdmin, async (req, res) => {
   try {
     const newItem = new ShopItem(req.body);
     await newItem.save();
@@ -14,7 +15,7 @@ router.post('/add', async (req, res) => {
 });
 
 // Update shop item
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id',authorizeAdmin, async (req, res) => {
   try {
     const updatedItem = await ShopItem.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!updatedItem) {
@@ -27,18 +28,23 @@ router.put('/update/:id', async (req, res) => {
 });
 
 // Delete shop item(s)
-router.delete('/delete', async (req, res) => {
+router.delete('/delete/:id', authorizeAdmin, async (req, res) => {
   try {
-    const { ids } = req.body; // Expecting an array of IDs
-    await ShopItem.deleteMany({ _id: { $in: ids } });
-    res.status(200).send({ message: 'Items deleted successfully' });
+    const itemId = req.params.id; // Get the item ID from the URL parameter
+    const deletedItem = await ShopItem.findByIdAndDelete(itemId);
+    
+    if (!deletedItem) {
+      return res.status(404).send({ error: 'Item not found' });
+    }
+
+    res.status(200).send({ message: 'Item deleted successfully' });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
 });
 
 // Search shop items
-router.get('/search', async (req, res) => {
+router.get('/search',authorizeAdmin, async (req, res) => {
   try {
     const query = req.query;
     const items = await ShopItem.find(query);

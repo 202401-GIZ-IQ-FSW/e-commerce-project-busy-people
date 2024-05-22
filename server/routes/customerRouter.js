@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const customerController = require("../controllers/customerController");
+const customerController = require("../controllers/customerController/customerController");
 
-router.get("/customer/shop-items/filter", customerController.filterItems)
+router.get("/shop-items/filter", customerController.filterItems)
 
-router.get("/customer/shop-items/search", customerController.searchItems)
+router.get("shop-items/search", customerController.searchItems)
 
-router.post("/customer/cart", customerController.addItemsToCart)
+router.post("/cart", customerController.addItemsToCart)
 
-router.post("/customer/checkout", customerController.checkoutAndOrder)
+router.post("/checkout", customerController.checkoutAndOrder)
 
-router.get("/customer/shop-items/:itemId", customerController.getItemById)
+router.get("/shop-items/:itemId", customerController.getItemById)
+
+module.exports = router;

@@ -1,8 +1,10 @@
 const Item = require('../../models/shopItem');
 const Customer = require('../../models/customer');
-const Order = require('../../models/order');
+const Order = require('../../models/order')
 const Admin = require('../../models/admin');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 
 
@@ -42,6 +44,7 @@ exports.createAdminAccount = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        
         // Create the new admin account
         const newAdmin = new Admin({
             email: email,
@@ -52,8 +55,11 @@ exports.createAdminAccount = async (req, res) => {
         // Save the new admin account to the database
         await newAdmin.save();
 
-        // Send a success response
-        res.status(201).json({ message: 'New admin account created successfully' });
+        // Generate JWT token for the new admin
+        const token = jwt.sign({ adminId: newAdmin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Send the token in the response
+        res.status(201).json({ message: 'New admin account created successfully', token: token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

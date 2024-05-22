@@ -5,23 +5,23 @@ const customerControl = require('../controllers/authenticAndAuthorized/customerC
 const authMiddleware = require('../middleware/customerAuth');
 
 // signup the customer 
-customerRouter.post('/customer/signup', customerAuth.signup);
+customerRouter.post('/signup', customerAuth.signup);
 
 // sign in the customer 
-customerRouter.post('/customer/singin',authMiddleware, customerAuth.signin);
+customerRouter.post('/signin',authMiddleware,  customerAuth.signin);
 
 // sign out the customer
-customerRouter.post('/customer/singout',authMiddleware, customerAuth.signout);
+customerRouter.post('/signout',authMiddleware,  customerAuth.signout);
 
 //get all order
-customerRouter.get('customer/orders', authMiddleware, customerControl.getAllOrders);
+customerRouter.get('/orders',authMiddleware,  customerControl.getAllOrders);
 
 //get and update profile
-customerRouter.get('customer/profile', authMiddleware, customerControl.getProfile);
-customerRouter.put('customer/profile', authMiddleware, customerControl.updateProfile);
+customerRouter.get('/profile', authMiddleware, customerControl.getProfile);
+customerRouter.put('/profile', authMiddleware, customerControl.updateProfile);
 
 //update the cart
-customerRouter.put('customer/cart', authMiddleware, customerControl.updateCart);
+customerRouter.put('/cart', authMiddleware, customerControl.updateCart);
 
 
 
