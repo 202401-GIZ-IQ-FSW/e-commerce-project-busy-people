@@ -164,7 +164,7 @@ const deleteCartItem = async (req, res) => {
 
 // Checkout and create an order
 const checkoutAndOrder = async (req, res) => {
-  const customerId = req.customer.userId;
+  const customerId = req.customer.userId.userId;
 
   try {
     // Find the cart and populate the shopItemId field

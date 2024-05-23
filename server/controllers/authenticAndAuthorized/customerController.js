@@ -6,8 +6,9 @@ const bcrypt = require('bcrypt');
 
 // Fetch all previous orders information for a customer
 async function getAllOrders(req, res) {
+    customerId = req.customer.userId.userId;
     try {
-        const orders = await Order.find({ customerId: req.customerId });
+        const orders = await Order.find({ customerId: customerId });
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });

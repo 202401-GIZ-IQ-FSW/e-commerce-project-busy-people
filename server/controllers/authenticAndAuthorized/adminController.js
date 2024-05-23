@@ -26,7 +26,7 @@ exports.getAllOrders = async(req, res) => {
 
 exports.getAllCustomers = async (req, res) => {
     try {
-        const customers = await Customer.find({});
+        const customers = await Customer.find({}).select('-password');
         if (!customers || customers.length === 0) {
             return res.status(404).json({ message: 'No customers found' });
         }

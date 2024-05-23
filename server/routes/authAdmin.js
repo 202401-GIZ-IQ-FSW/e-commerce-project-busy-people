@@ -14,7 +14,7 @@ adminRouter.post('/signup', adminAuth.signup);
 adminRouter.post('/signout', authMiddleware, adminAuth.signout);
 
 // Fetching the orders
-adminRouter.get('/orders',  adminController.getAllOrders);
+adminRouter.get('/orders', authMiddleware, adminController.getAllOrders);
 
 // Fetching the customers
 adminRouter.get('/customers', authMiddleware, adminController.getAllCustomers);
