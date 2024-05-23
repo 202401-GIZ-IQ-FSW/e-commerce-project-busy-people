@@ -57,7 +57,8 @@ const searchItems = async (req, res) => {
 
 // Add items to the customer's cart
 const addItemsToCart = async (req, res) => {
-  const { customerId, itemId, quantity } = req.body;
+  const { itemId, quantity } = req.body;
+  const customerId = req.customer.userId.userId; // Get customerId from middleware
 
   // Validate that quantity is a positive integer
   if (!Number.isInteger(quantity) || quantity <= 0) {
@@ -101,10 +102,69 @@ const addItemsToCart = async (req, res) => {
   }
 }
 
+const updateCartItem = async (req, res) => {
+  try {
+      const customerId = req.customer.userId.userId;
+      const itemId = req.params.itemId;
+      const { quantity } = req.body;
+
+      // Validate input
+      if (!quantity || !Number.isInteger(quantity) || quantity <= 0) {
+          return res.status(400).json({ message: "Invalid input" });
+      }
+
+      // Find the customer's cart
+      let cart = await cartModel.findOne({ customerId });
+      if (!cart) {
+          return res.status(404).json({ message: "Cart not found" });
+      }
+
+      // Find the item in the cart
+      const cartItem = cart.items.find(item => item.shopItemId.toString() === itemId);
+      if (!cartItem) {
+        return res.status(404).json({ message: "Item not found in the cart" });
+      }
+
+      // Update item quantity
+      cartItem.quantity = quantity;
+
+      // Save the cart
+      await cart.save();
+
+      res.status(200).json(cart);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteCartItem = async (req, res) => {
+  try {
+      const customerId = req.customer.userId.userId;
+      const itemId = req.params.itemId;
+
+      // Find the customer's cart
+      let cart = await cartModel.findOne({ customerId });
+      if (!cart) {
+          return res.status(404).json({ message: "Cart not found" });
+      }
+
+      // Remove the item from the cart
+      cart.items = cart.items.filter(item => item.shopItemId.toString() !== itemId);
+
+      // Save the cart
+      await cart.save();
+
+      res.status(200).json({message: "Cart Item deleted successfully"});
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  }
+};
 
 // Checkout and create an order
 const checkoutAndOrder = async (req, res) => {
-  const { customerId } = req.body;
+  const customerId = req.customer.userId;
 
   try {
     // Find the cart and populate the shopItemId field
@@ -168,6 +228,8 @@ module.exports = {
   filterItems,
   searchItems,
   addItemsToCart,
+  updateCartItem,
+  deleteCartItem,
   checkoutAndOrder,
   getItemById,
 };
