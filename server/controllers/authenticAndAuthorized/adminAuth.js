@@ -1,14 +1,10 @@
 const Admin = require('../../models/admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { generateToken } = require('../../utils/tokenUtils');
 
 exports.signup = async (req, res) => {
     const { email, password } = req.body;
-
-    // Basic input validation
-    if (!email || !password) {
-        return res.status(400).send('Email and password are required');
-    }
 
     try {
         const existingUser = await Admin.findOne({ email });
@@ -26,7 +22,11 @@ exports.signup = async (req, res) => {
 
         await newAdmin.save();
 
-        res.status(201).send('User created successfully',{ token });
+        // Generate JWT token
+        const token = generateToken(newAdmin._id);
+
+        res.status(201).json({ token, message: 'User created successfully' });
+
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).send('Server error');
@@ -48,9 +48,10 @@ exports.signin = async (req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ userId: existingUser._id }, 'your_secret_key_here', { expiresIn: '1h' });
+        const token = generateToken(existingUser._id);
 
         res.status(200).json({ token });
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');

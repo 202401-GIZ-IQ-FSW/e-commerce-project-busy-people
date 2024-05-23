@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const ShopItem = require('../models/shopItem');
-const authorizeAdmin = require('../middleware/adminAuthorization');
+const authMiddleware = require('../middleware/adminAuthorization');
 
 // Add new shop item
-router.post('/add',authorizeAdmin, async (req, res) => {
+router.post('/add',authMiddleware, async (req, res) => {
   try {
     const newItem = new ShopItem(req.body);
     await newItem.save();
@@ -15,7 +15,7 @@ router.post('/add',authorizeAdmin, async (req, res) => {
 });
 
 // Update shop item
-router.put('/update/:id',authorizeAdmin, async (req, res) => {
+router.put('/update/:id',authMiddleware, async (req, res) => {
   try {
     const updatedItem = await ShopItem.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!updatedItem) {
@@ -28,7 +28,7 @@ router.put('/update/:id',authorizeAdmin, async (req, res) => {
 });
 
 // Delete shop item(s)
-router.delete('/delete/:id', authorizeAdmin, async (req, res) => {
+router.delete('/delete/:id', authMiddleware, async (req, res) => {
   try {
     const itemId = req.params.id; // Get the item ID from the URL parameter
     const deletedItem = await ShopItem.findByIdAndDelete(itemId);
@@ -44,7 +44,7 @@ router.delete('/delete/:id', authorizeAdmin, async (req, res) => {
 });
 
 // Search shop items
-router.get('/search',authorizeAdmin, async (req, res) => {
+router.get('/search',authMiddleware, async (req, res) => {
   try {
     const query = req.query;
     const items = await ShopItem.find(query);

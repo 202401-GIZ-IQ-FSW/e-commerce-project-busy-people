@@ -1,6 +1,7 @@
 const Customer = require('../../models/customer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { generateToken } = require('../../utils/tokenUtils');
 
 exports.signup = async (req, res) => {
     const { email, password } = req.body;
@@ -26,7 +27,10 @@ exports.signup = async (req, res) => {
 
         await newCustomer.save();
 
-        res.status(201).send('User created successfully',{ token });
+        // Generate JWT token
+        const token = generateToken(newCustomer._id);
+
+        res.status(201).json({ token, message: 'customer created successfully' });
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).send('Server error');
@@ -48,7 +52,10 @@ exports.signin = async (req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ userId: existingUser._id }, 'your_secret_key_here', { expiresIn: '1h' });
+        // const token = jwt.sign({ userId: existingUser._id }, , { expiresIn: '50h' });
+
+        const token = generateToken({userId: existingUser._id}, process.env.JWT_SECRET, {expiresIn: '50h'});
+
 
         res.status(200).json({ token });
     } catch (error) {

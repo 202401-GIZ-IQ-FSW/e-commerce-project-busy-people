@@ -1,28 +1,20 @@
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/admin');
 
-const authorizeAdmin = async (req, res, next) => {
-    const token = req.header('Authorization');
-
-    if (!token) {
-        return res.status(401).json({ error: 'Authentication required' });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const admin = await Admin.findById(decoded.userId);
-
-        if (!admin || !admin.isAdmin) {
-            return res.status(403).json({ error: 'Access denied, admin privileges required' });
-        }
-
-        // Attach the admin to the request object
-        req.admin = admin;
-        next();
-    } catch (error) {
-        return res.status(500).json({ error: 'Internal server error' });
+const authMiddleware = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if (err) {
+                console.error(err.message); // Log the error for debugging
+                return res.status(401).json({ error: 'Unauthorized' }); // Send an unauthorized response
+            } else {
+                req.user = decodedToken; // Attach decoded token to the request for further processing
+                next(); // Call next middleware or route handler
+            }
+        });
+    } else {
+        return res.status(401).json({ error: 'Unauthorized' }); // Send an unauthorized response if there's no token
     }
 };
 
-module.exports = authorizeAdmin;
+module.exports = authMiddleware;

@@ -2,24 +2,24 @@ const express = require('express');
 const adminRouter = express.Router();
 const adminController = require('../controllers/authenticAndAuthorized/adminController');
 const adminAuth = require('../controllers/authenticAndAuthorized/adminAuth');
-const authorizeAdmin = require('../middleware/adminAuthorization');
+const authMiddleware = require('../middleware/adminAuthorization');
 
 // Admin signin endpoint
-adminRouter.post('/signin',authorizeAdmin, adminAuth.signin);
+adminRouter.post('/signin',authMiddleware, adminAuth.signin);
 
 // Admin signup endpoint
 adminRouter.post('/signup', adminAuth.signup);
 
 // Admin signout endpoint
-adminRouter.post('/signout', authorizeAdmin, adminAuth.signout);
+adminRouter.post('/signout', authMiddleware, adminAuth.signout);
 
 // Fetching the orders
-adminRouter.get('/orders', authorizeAdmin, adminController.getAllOrders);
+adminRouter.get('/orders',  adminController.getAllOrders);
 
 // Fetching the customers
-adminRouter.get('/customers', authorizeAdmin, adminController.getAllCustomers);
+adminRouter.get('/customers', authMiddleware, adminController.getAllCustomers);
 
 // Creating a new admin
-adminRouter.post('/new-admin', authorizeAdmin, adminController.createAdminAccount);
+adminRouter.post('/new-admin', authMiddleware, adminController.createAdminAccount);
 
 module.exports = adminRouter;
