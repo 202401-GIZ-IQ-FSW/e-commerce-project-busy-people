@@ -5,7 +5,7 @@ const adminAuth = require('../controllers/authenticAndAuthorized/adminAuth');
 const authMiddleware = require('../middleware/adminAuthorization');
 
 // Admin signin endpoint
-adminRouter.post('/signin',authMiddleware, adminAuth.signin);
+adminRouter.post('/signin', adminAuth.signin);
 
 // Admin signup endpoint
 adminRouter.post('/signup', adminAuth.signup);
